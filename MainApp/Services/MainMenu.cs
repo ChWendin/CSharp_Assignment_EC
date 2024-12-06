@@ -31,7 +31,8 @@ public class MainMenu
             Console.WriteLine("1. Lägg till användare");
             Console.WriteLine("2. Visa alla användare");
             Console.WriteLine("3. Uppdatera användare");
-            Console.WriteLine("4. Avsluta");
+            Console.WriteLine("4. Radera alla användare");
+            Console.WriteLine("5. Avsluta");
             Console.Write("Välj ett alternativ: ");
 
             var input = Console.ReadLine();
@@ -47,6 +48,9 @@ public class MainMenu
                     //UpdateUser();
                     break;
                 case "4":
+                    DeleteAllUsers();
+                    break;
+                case "5":
                     Console.WriteLine("Avslutar...");
                     Console.ReadKey();
                     return;
@@ -105,14 +109,14 @@ public class MainMenu
 
     private void ShowAllUsers()
     {
-        var users = _userService.GetAllUsers();
+        var users = _users;
         if (users.Count == 0)
         {
             Console.WriteLine("Det finns inga användare.");
             Console.ReadKey();
             return;
         }
-
+        //Visar alla användare 
         Console.WriteLine("\n--- Alla användare ---");
         foreach (var user in users)
         {
@@ -123,4 +127,25 @@ public class MainMenu
         }
         Console.ReadKey();
     }
+
+    private void DeleteAllUsers() 
+    { 
+        Console.Clear();
+        Console.WriteLine("Är du säker på att du vill radera alla användare? (ja/nej)");
+        var input = Console.ReadLine();
+        if (input!.ToLower() == "ja")
+        {
+            _users.Clear();
+            _fileService.SaveToFile(_users);
+            Console.WriteLine("Alla användare har nu raderats");
+            
+        }
+        else 
+        { 
+            Console.WriteLine("Inga användare har raderats.");
+        }
+        Console.ReadKey();
+    }
+
+
 }

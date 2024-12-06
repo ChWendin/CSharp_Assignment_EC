@@ -24,14 +24,28 @@ public class UserService : IUserInterface
             throw new ArgumentNullException(nameof(user), "Användaren kan inte vara null.");
         }
 
-        // Sätt unikt ID om det inte redan är satt
+        // Sätt unikt ID 
         if (user.Id == 0)
         {
-            user.Id = _users.Count > 0 ? _users.Max(u => u.Id) + 1 : 1;
+            user.Id = GenerateUniqueId();
         }
 
         _users.Add(user);
     }
+
+    private int GenerateUniqueId()
+    {
+        int id;
+        do
+        {
+            // Generera ett GUID och ta de 4 sista siffrorna från dess hashkod
+              id = Math.Abs(Guid.NewGuid().GetHashCode() % 10000);
+            // Säkerställer att ID:t är unikt
+        } while (_users.Any(u => u.Id == id)); 
+
+        return id;
+    }
+
 
     // Hämta en användare baserat på ID
     public UserModel GetUserById(int id)

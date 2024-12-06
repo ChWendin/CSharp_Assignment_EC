@@ -20,8 +20,16 @@ public class UserFileService
     //Sparar befintligt innehåll i listan till filen
     public void SaveToFile(List<UserModel> users) 
     {
+        try 
+        { 
         var json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(_filePath, json);
+        }
+        catch 
+        {
+            Console.WriteLine("Något gick fel! Vi kunde inte spara innehållet till filen.");
+        }
+        
     }
 
     public List<UserModel> LoadFromFile()
@@ -32,10 +40,21 @@ public class UserFileService
             // Returnera tom lista om filen inte finns
             return new List<UserModel>(); 
         }
-       
-        //Om filen finns laddas innehållet in
-        var json = File.ReadAllText(_filePath);
-        return JsonSerializer.Deserialize<List<UserModel>>(json) ?? new List<UserModel>();
+
+        try
+        {
+            //Om filen finns laddas innehållet in
+            var json = File.ReadAllText(_filePath);
+            return JsonSerializer.Deserialize<List<UserModel>>(json) ?? new List<UserModel>();
+        }
+            catch 
+            {   
+                Console.WriteLine("Vi kunde inte ladda filen!");
+                return new List<UserModel>();
+            }
+        
     }
+
+   
 
 }
