@@ -45,7 +45,7 @@ public class MainMenu
                     ShowAllUsers();
                     break;
                 case "3":
-                    //UpdateUser();
+                    UpdateUser();
                     break;
                 case "4":
                     DeleteAllUsers();
@@ -125,6 +125,77 @@ public class MainMenu
             Console.WriteLine($"Adress: {user.Adress} Postal code: {user.PostalCode} City: {user.City}");
             Console.WriteLine("");
         }
+        Console.ReadKey();
+    }
+
+    private void UpdateUser() 
+    {
+        Console.Clear();
+        Console.WriteLine("Ange ID på den användare du vill söka efter: ");
+        if (!int.TryParse(Console.ReadLine(), out int userId))
+        {
+            Console.WriteLine("Ogiltigt ID. Försök igen.");
+            Console.ReadKey();
+            return;
+        }
+
+        var user = _users.FirstOrDefault(u => u.Id == userId);
+        if (user == null)
+        {
+            Console.WriteLine($"Ingen användare med ID {userId} hittades.");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.WriteLine("Hittad användare:");
+        Console.WriteLine($"ID: {user.Id} First name: {user.FirstName}, Last name: {user.LastName}, E-mail: {user.Email}");
+        Console.WriteLine($"Phone number: {user.PhoneNumber}");
+        Console.WriteLine($"Adress: {user.Adress} Postal code: {user.PostalCode} City: {user.City}");
+        Console.WriteLine("");
+        Console.WriteLine("Vill du [1] Uppdatera eller [2] Radera denna användare?");
+        var choice = Console.ReadLine();
+
+        if (choice == "1")
+        {
+            // Uppdatera användare
+            Console.WriteLine("Ange nytt förnamn (lämna tomt för att behålla befintligt): ");
+            string newFirstName = Console.ReadLine()!;
+            Console.WriteLine("Ange nytt efternamn (lämna tomt för att behålla befintligt): ");
+            string newLastName = Console.ReadLine()!;
+            Console.WriteLine("Ange ny E-post (lämna tomt för att behålla befintligt): ");
+            string newEmail = Console.ReadLine()!;
+            Console.WriteLine("Ange nytt telefonnummer (lämna tomt för att behålla befintligt): ");
+            string newPhoneNumber = Console.ReadLine()!;
+            Console.WriteLine("Ange ny adress (lämna tomt för att behålla befintligt): ");
+            string newAdress = Console.ReadLine()!;
+            Console.WriteLine("Ange nytt postnummer (lämna tomt för att behålla befintligt): ");
+            string newPostalCode = Console.ReadLine()!;
+            Console.WriteLine("Ange ny bostadsort (lämna tomt för att behålla befintligt): ");
+            string newCity = Console.ReadLine()!;
+
+            user.FirstName = string.IsNullOrWhiteSpace(newFirstName) ? user.FirstName : newFirstName;
+            user.LastName = string.IsNullOrWhiteSpace(newLastName) ? user.LastName : newLastName;
+            user.Email = string.IsNullOrWhiteSpace(newEmail) ? user.Email : newEmail;
+            user.PhoneNumber = string.IsNullOrWhiteSpace(newPhoneNumber) ? user.PhoneNumber : newPhoneNumber;
+            user.Adress = string.IsNullOrWhiteSpace(newAdress) ? user.Adress : newAdress;
+            user.PostalCode = string.IsNullOrWhiteSpace(newPostalCode) ? user.PostalCode : newPostalCode;
+            user.City = string.IsNullOrWhiteSpace(newCity) ? user.City : newCity;
+
+            Console.WriteLine($"Användaren med ID {user.Id} har uppdaterats.");
+        }
+        else if (choice == "2")
+        {
+            // Radera användare
+            _users.Remove(user);
+            Console.WriteLine($"Användaren med ID {user.Id} har raderats.");
+        }
+        else
+        {
+            Console.WriteLine("Ogiltigt val. Ingen ändring har gjorts.");
+        }
+
+        // Spara ändringarna till fil
+        _fileService.SaveToFile(_users);
         Console.ReadKey();
     }
 
