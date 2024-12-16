@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Business.Interfaces;
 using Business.Services;
 using Console_MainApp.Services;
@@ -7,11 +9,21 @@ class Program
 {
     static void Main(string[] args)
     { 
-        IUserInterface userInterface = new UserService();
-        var fileService = new UserFileService("users.json");
-        
-        var menu = new MainMenu(userInterface, fileService);
+        //Skapa en host för att konfigurera DI
+        IHost host = Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                //Registrera tjänster
+                services.AddSingleton<IUserInterface, UserService>();
+                services.AddSingleton<UserFileService>(provider => new UserFileService("users.json"));
+                services.AddSingleton<MainMenu>();
+            })
+            .Build();
 
-        menu.ShowMenu();
+        //Kör programmet
+        var mainMenu = host.Services.GetRequiredService<MainMenu>();
+        mainMenu.ShowMenu();
     }
+   
+      
 }

@@ -3,20 +3,22 @@
 using Business.Interfaces;
 using Business.Models;
 
+
+
 namespace Business.Services;
 
 public class UserService : IUserInterface
 {
-    // Privat lista för att lagra användare
+    //Lista för att lagra användare
     private readonly List<UserModel> _users;
 
-    // Konstruktor för att initiera listan
+    //Konstruktor för att initiera listan
     public UserService()
     {
         _users = new List<UserModel>();
     }
 
-    // Lägg till en användare i listan
+    //Lägger till en användare i listan
     public void AddUser(UserModel user)
     {
         if (user == null)
@@ -24,7 +26,7 @@ public class UserService : IUserInterface
             throw new ArgumentNullException(nameof(user), "Användaren kan inte vara null.");
         }
 
-        // Sätt unikt ID 
+        //Sätter ett unikt ID 
         if (user.Id == 0)
         {
             user.Id = GenerateUniqueId();
@@ -38,16 +40,16 @@ public class UserService : IUserInterface
         int id;
         do
         {
-            // Generera ett GUID och ta de 4 sista siffrorna från dess hashkod
+            //Genererar ett GUID och tar de 4 sista siffrorna från hashkoden
               id = Math.Abs(Guid.NewGuid().GetHashCode() % 10000);
-            // Säkerställer att ID:t är unikt
+            //Säkerställer att ID är unikt
         } while (_users.Any(u => u.Id == id)); 
 
         return id;
     }
 
 
-    // Hämta en användare baserat på ID
+    //Hämta en användare baserat på ID
     public UserModel GetUserById(int id)
     {
         var user = _users.FirstOrDefault(u => u.Id == id);
@@ -62,6 +64,8 @@ public class UserService : IUserInterface
     // Hämta alla användare
     public List<UserModel> GetAllUsers()
     {
-        return _users.ToList(); // Returnerar en kopia av listan för att förhindra direkt manipulation
+        return _users.ToList(); //Returnerar en kopia av listan för att förhindra att den kan ändras på olika ställen
     }
+
+    
 }

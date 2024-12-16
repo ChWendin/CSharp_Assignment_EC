@@ -19,6 +19,7 @@ public class MainMenu
     {
         _userService = userService;
         _fileService = fileService;
+        //Laddar in filen vid programstart
         _users = _fileService.LoadFromFile();
     }
     
@@ -30,7 +31,7 @@ public class MainMenu
             Console.WriteLine("\n--- Huvudmeny ---");
             Console.WriteLine("1. Lägg till användare");
             Console.WriteLine("2. Visa alla användare");
-            Console.WriteLine("3. Uppdatera användare");
+            Console.WriteLine("3. Uppdatera/Radera användare");
             Console.WriteLine("4. Radera alla användare");
             Console.WriteLine("5. Avsluta");
             Console.Write("Välj ett alternativ: ");
@@ -96,9 +97,9 @@ public class MainMenu
             _userService.AddUser(newUser);
             //Lägg till användare i listan
             _users.Add(newUser);
-            // Spara listan till fil
+            //Sparar den lokala listan till fil
             _fileService.SaveToFile(_users); 
-            Console.WriteLine($"Användaren {newUser.FirstName} {newUser.LastName} (ID: {newUser.Id}) har lagts till.");
+            Console.WriteLine($"Användaren {newUser.FirstName} {newUser.LastName} - ID: {newUser.Id} har lagts till.");
             Console.ReadKey();
         }
         catch (Exception ex)
@@ -132,6 +133,8 @@ public class MainMenu
     {
         Console.Clear();
         Console.WriteLine("Ange ID på den användare du vill söka efter: ");
+        
+        //Om sökningen är i felaktigt format så skickas felmeddelande
         if (!int.TryParse(Console.ReadLine(), out int userId))
         {
             Console.WriteLine("Ogiltigt ID. Försök igen.");
@@ -139,6 +142,8 @@ public class MainMenu
             return;
         }
 
+
+        //Söker igenom listan efter användare på ID och visar hela användaren om man får träff på sökningen. Annars får användaren ett felmeddelande.
         var user = _users.FirstOrDefault(u => u.Id == userId);
         if (user == null)
         {
@@ -157,7 +162,7 @@ public class MainMenu
 
         if (choice == "1")
         {
-            // Uppdatera användare
+            //Uppdaterar användare
             Console.WriteLine("Ange nytt förnamn (lämna tomt för att behålla befintligt): ");
             string newFirstName = Console.ReadLine()!;
             Console.WriteLine("Ange nytt efternamn (lämna tomt för att behålla befintligt): ");
@@ -173,6 +178,7 @@ public class MainMenu
             Console.WriteLine("Ange ny bostadsort (lämna tomt för att behålla befintligt): ");
             string newCity = Console.ReadLine()!;
 
+            //Om inget fylls i så behålls det gamla värdet.
             user.FirstName = string.IsNullOrWhiteSpace(newFirstName) ? user.FirstName : newFirstName;
             user.LastName = string.IsNullOrWhiteSpace(newLastName) ? user.LastName : newLastName;
             user.Email = string.IsNullOrWhiteSpace(newEmail) ? user.Email : newEmail;
@@ -185,7 +191,7 @@ public class MainMenu
         }
         else if (choice == "2")
         {
-            // Radera användare
+            //Raderar användare
             _users.Remove(user);
             Console.WriteLine($"Användaren med ID {user.Id} har raderats.");
         }
@@ -194,11 +200,13 @@ public class MainMenu
             Console.WriteLine("Ogiltigt val. Ingen ändring har gjorts.");
         }
 
-        // Spara ändringarna till fil
+        
+        //Sparar ändringarna till fil
         _fileService.SaveToFile(_users);
         Console.ReadKey();
     }
 
+    //Raderar samtliga användare i listan och uppdaterar filen.
     private void DeleteAllUsers() 
     { 
         Console.Clear();
