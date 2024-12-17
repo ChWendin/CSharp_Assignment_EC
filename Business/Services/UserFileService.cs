@@ -14,6 +14,8 @@ public class UserFileService
     public UserFileService(string filePath) 
     { 
         _filePath = filePath;
+        Console.WriteLine($"FilePath som används i UserFileService: {_filePath}");
+        Console.ReadKey();
     }
 
 
@@ -28,6 +30,7 @@ public class UserFileService
         catch 
         {
             Console.WriteLine("Något gick fel! Vi kunde inte spara innehållet till filen.");
+            Console.ReadKey();
         }
         
     }
@@ -50,6 +53,7 @@ public class UserFileService
             catch 
             {   
                 Console.WriteLine("Vi kunde inte ladda filen!");
+                Console.ReadKey();
                 return new List<UserModel>();
             }
         
