@@ -145,24 +145,16 @@ public class SubMenus
             Console.WriteLine("Ange ny bostadsort (lämna tomt för att behålla befintligt): ");
             string newCity = Console.ReadLine()!;
 
-            //Om inget fylls i så behålls det gamla värdet.
-            user.FirstName = string.IsNullOrWhiteSpace(newFirstName) ? user.FirstName : newFirstName;
-            user.LastName = string.IsNullOrWhiteSpace(newLastName) ? user.LastName : newLastName;
-            user.Email = string.IsNullOrWhiteSpace(newEmail) ? user.Email : newEmail;
-            user.PhoneNumber = string.IsNullOrWhiteSpace(newPhoneNumber) ? user.PhoneNumber : newPhoneNumber;
-            user.Adress = string.IsNullOrWhiteSpace(newAdress) ? user.Adress : newAdress;
-            user.PostalCode = string.IsNullOrWhiteSpace(newPostalCode) ? user.PostalCode : newPostalCode;
-            user.City = string.IsNullOrWhiteSpace(newCity) ? user.City : newCity;
-
-            _userService.SaveUsersToFile();
+            _userService.UpdateUser(userId, newFirstName, newLastName, newEmail, newPhoneNumber, newAdress, newPostalCode, newCity);
 
             Console.WriteLine($"Användaren med ID {user.Id} har uppdaterats.");
         }
+
         else if (choice == "2")
         {
             try
             {
-                _userService.DeleteUser(user.Id); // Lägg till en metod i IUserInterface om den saknas
+                _userService.DeleteUser(user.Id);
                 Console.WriteLine($"Användaren med ID {user.Id} har raderats.");
             }
             catch (Exception ex)

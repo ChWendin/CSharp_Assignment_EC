@@ -13,6 +13,7 @@ public class UserService : IUserInterface
 
     //Lista för att lagra användare
     private readonly List<UserModel> _users;
+
     private readonly UserFileService _fileService;
 
     //Konstruktor för att initiera listan
@@ -103,6 +104,23 @@ public class UserService : IUserInterface
         _users.Remove(user);
 
         // Spara uppdaterad lista till fil
+        _fileService.SaveToFile(_users);
+    }
+
+    public void UpdateUser(int id, string? firstName, string? lastName, string? email, string? phoneNumber, string? address, string? postalCode, string? city) 
+    {
+        var user = GetUserById(id);
+        if (user == null) throw new Exception("Användaren hittades inte.");
+
+        //Om inget fylls i så behålls det gamla värdet.
+        user.FirstName = string.IsNullOrWhiteSpace(firstName) ? user.FirstName : firstName;
+        user.LastName = string.IsNullOrWhiteSpace(lastName) ? user.LastName : lastName;
+        user.Email = string.IsNullOrWhiteSpace(email) ? user.Email : email;
+        user.PhoneNumber = string.IsNullOrWhiteSpace(phoneNumber) ? user.PhoneNumber : phoneNumber;
+        user.Adress = string.IsNullOrWhiteSpace(address) ? user.Adress : address;
+        user.PostalCode = string.IsNullOrWhiteSpace(postalCode) ? user.PostalCode : postalCode;
+        user.City = string.IsNullOrWhiteSpace(city) ? user.City : city;
+
         _fileService.SaveToFile(_users);
     }
 
