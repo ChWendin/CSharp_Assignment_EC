@@ -95,11 +95,7 @@ public class UserService : IUserInterface
 
     public void DeleteUser(int id)
     {
-        var user = _users.FirstOrDefault(u => u.Id == id);
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"Ingen användare hittades med ID {id}.");
-        }
+        var user = GetUserById(id);
 
         _users.Remove(user);
 
@@ -110,6 +106,7 @@ public class UserService : IUserInterface
     public void UpdateUser(int id, string? firstName, string? lastName, string? email, string? phoneNumber, string? address, string? postalCode, string? city) 
     {
         var user = GetUserById(id);
+
         if (user == null) throw new Exception("Användaren hittades inte.");
 
         //Om inget fylls i så behålls det gamla värdet.

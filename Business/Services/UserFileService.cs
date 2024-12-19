@@ -33,7 +33,7 @@ public class UserFileService : IUserFileService
         }
         catch (Exception ex) 
         {
-            throw new IOException("An error occurred while saving users to the file.", ex);
+            throw new IOException("Ett fel uppstod när vi försökte spara användare till filen.", ex);
         }
         
     }
@@ -55,7 +55,7 @@ public class UserFileService : IUserFileService
         }
             catch (Exception ex) 
             {
-            throw new IOException("An error occurred while loading users from the file.", ex);
+            throw new IOException("Ett fel uppstod när vi försökte ladda användare från filen.", ex);
             
             }
         
