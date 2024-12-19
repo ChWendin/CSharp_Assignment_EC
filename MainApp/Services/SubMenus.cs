@@ -12,10 +12,10 @@ namespace Console_MainApp.Services;
 public class SubMenus
 {
     private readonly IUserInterface _userService;
-    private readonly UserFileService _fileService;
+    private readonly IUserFileService _fileService;
    
 
-    public SubMenus(IUserInterface userService, UserFileService fileService)
+    public SubMenus(IUserInterface userService, IUserFileService fileService)
     {
         _userService = userService;
         _fileService = fileService;

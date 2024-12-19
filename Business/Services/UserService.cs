@@ -13,11 +13,11 @@ public class UserService : IUserInterface
 
     //Lista för att lagra användare
     private readonly List<UserModel> _users;
+    private readonly IUserFileService _fileService;
 
-    private readonly UserFileService _fileService;
 
     //Konstruktor för att initiera listan
-    public UserService(UserFileService fileService)
+    public UserService(IUserFileService fileService)
     {
         _fileService = fileService;
         _users = _fileService.LoadFromFile();

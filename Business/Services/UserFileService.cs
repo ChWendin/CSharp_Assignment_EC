@@ -1,12 +1,17 @@
 ﻿
 
 using System.Text.Json;
+using Business.Interfaces;
 using Business.Models;
 
 
 namespace Business.Services;
 
-public class UserFileService
+
+
+
+
+public class UserFileService : IUserFileService
 {
     //Namnet på den lokala filen som användare sparas till och laddas från
     private readonly string _filePath = "users.json"; 
@@ -14,8 +19,7 @@ public class UserFileService
     public UserFileService(string filePath) 
     { 
         _filePath = filePath;
-        Console.WriteLine($"FilePath som används i UserFileService: {_filePath}");
-        Console.ReadKey();
+
     }
 
 
@@ -27,10 +31,9 @@ public class UserFileService
         var json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(_filePath, json);
         }
-        catch 
+        catch (Exception ex) 
         {
-            Console.WriteLine("Något gick fel! Vi kunde inte spara innehållet till filen.");
-            Console.ReadKey();
+            throw new IOException("An error occurred while saving users to the file.", ex);
         }
         
     }
@@ -40,7 +43,7 @@ public class UserFileService
         
         if (!File.Exists(_filePath))
         {
-            // Returnera tom lista om filen inte finns
+            //Returnera tom lista om filen inte finns
             return new List<UserModel>(); 
         }
 
@@ -50,11 +53,10 @@ public class UserFileService
             var json = File.ReadAllText(_filePath);
             return JsonSerializer.Deserialize<List<UserModel>>(json) ?? new List<UserModel>();
         }
-            catch 
-            {   
-                Console.WriteLine("Vi kunde inte ladda filen!");
-                Console.ReadKey();
-                return new List<UserModel>();
+            catch (Exception ex) 
+            {
+            throw new IOException("An error occurred while loading users from the file.", ex);
+            
             }
         
     }

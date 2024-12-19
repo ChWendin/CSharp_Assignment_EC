@@ -11,13 +11,13 @@ namespace Console_MainApp.Services;
 public class MainMenu
 {
     private readonly IUserInterface _userService;
-    private readonly UserFileService _fileService;
+    private readonly IUserFileService _fileService;
     private readonly List<UserModel> _users;
     private readonly SubMenus _subMenus;
 
 
 
-    public MainMenu(IUserInterface userService, UserFileService fileService)
+    public MainMenu(IUserInterface userService, IUserFileService fileService)
     {
         _userService = userService;
         _fileService = fileService;

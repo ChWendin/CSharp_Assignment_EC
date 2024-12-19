@@ -15,8 +15,9 @@ class Program
             {
                 //Registrera tjänster
                 services.AddSingleton<IUserInterface, UserService>();
-                services.AddSingleton<UserFileService>(provider => new UserFileService("users.json"));
+                services.AddSingleton<IUserFileService>(provider => new UserFileService("users.json"));
                 services.AddSingleton<MainMenu>();
+                services.AddSingleton<SubMenus>();
             })
             .Build();
 
